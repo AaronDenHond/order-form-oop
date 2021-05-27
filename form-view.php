@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,7 +23,8 @@
             </li>
         </ul>
     </nav>
-    <form method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="POST">  
+<!--     this action makes it so you echo in your own php file -->
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
@@ -70,7 +72,7 @@
             Express delivery (+ 5 EUR) 
         </label>
             
-        <button type="submit" class="btn btn-primary">Order!</button>
+        <button type="submit" name="submit" value="submit" class="btn btn-primary">Order!</button>
     </form>
 
     <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
@@ -81,5 +83,7 @@
         text-align: center;
     }
 </style>
+
 </body>
 </html>
+
