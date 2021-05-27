@@ -26,35 +26,59 @@ class UserValidator
 
     //make methods now : both public and private ones. private so we cant access said methods outside of the class UserValidator.
 
-    public function validateFormView(){
-         //foreach to cycle through every input field we wish to check.array_key_exists checks if smth exists in the data, and we say here that if it doesnt exist, so array_key_exists is not true, we wish to trigger an error for the field that's not correctly filled in.
+    public function validateFormView()
+    {
+        //foreach to cycle through every input field we wish to check.array_key_exists checks if smth exists in the data, and we say here that if it doesnt exist, so array_key_exists is not true, we wish to trigger an error for the field that's not correctly filled in.
         foreach (self::$fields as $field) {
-         if(!array_key_exists($field, $this->data)) {
-             trigger_error("$field is not correctly in the data");
-             return;     
-         }
-
+            if (!array_key_exists($field, $this->data)) {
+                trigger_error("$field is not correctly in the data");
+                return;
+            }
         }
         //the if condition only returns if true (or false in this scenario). if thats not the case we keep going.
         $this->validateEmail();
         $this->validateStreet();
         $this->validateStreetNumber();
         $this->validateZipcode();
-
-
     }
-    
 
-    function validateEmail()
+
+    private function validateEmail()
     {
+
+        $val = trim($this->data["email"]);
+        //we trim the value, whats we store whats left of the value post trim.
+        if (empty($val)) {
+            $this->addErrorToArray("email", "email adress cannot be empty.");
+        }
     }
+
 
     private function validateStreet()
     {
+        $val = trim($this->data["street"]);
+        if (empty($val)) {
+            $this->addErrorToArray("street", "street cannot be empty.");
+        } else {
+            //checks if username is letters or numbers and between 6-12 characters long. we check again for false.
+            if (!preg_match('/^[a-zA-Z]{6-100}$/', $val)) {
+                $this->addErrorToArray("street", "street can only contain letters");
+            }
+        }
     }
+
 
     private function validateStreetNumber()
     {
+        $val = trim($this->data["streetnumber"]);
+        if (empty($val)) {
+            $this->addErrorToArray("street", "street cannot be empty.");
+        } else {
+            //checks if username is letters or numbers and between 6-12 characters long. we check again for false.
+            if (!preg_match('/^[0-9]{6-12}$/', $val)) {
+                $this->addErrorToArray("streetnumber", "streetnumber can only contain numbers");
+            }
+        }
     }
 
     private function validateCity()
@@ -67,13 +91,8 @@ class UserValidator
 
     // need a method to add errors to array.
 
-    private function addErrorToArray()
+    private function addErrorToArray($key, $value)
     {
+        $this->errors[$key] = $value;
     }
-}
-
-function cleanUpData($data) {
-  $data = trim($data); // trim — Strip whitespace (or other characters) from the beginning and end of a string.
-  $data = htmlspecialchars($data); // this function converts weird characters to HTML stuff.
-  return $data;
 }
